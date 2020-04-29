@@ -1,0 +1,12 @@
+{
+    "disableAutoUpdate": false,
+    "name": "auto-retaliate",
+    "author": "Elucifur",
+    "supportUrl": "https://github.com/elucifurr/auto-retaliate/issues",
+    "description": "Uses retaliate when knocked down",
+    "version": "1",
+    "servers": ["https://raw.githubusercontent.com/elucifurr/auto-retaliate/master/"],
+    "options": {
+        "niceName:": "Auto-Retaliate"
+    }
+}
