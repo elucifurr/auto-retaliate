@@ -1,4 +1,3 @@
 # Auto Retaliate
 
-## Usage
-**retaliate:** enable/disable
+Uses retaliate instantly when knocked down
