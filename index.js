@@ -1,69 +1,61 @@
-module.exports = function warriorMaster(mod) {
-    let cid,
-    enabled = true,
-    failsafe = 0,
-    w = 0,
-    loc = {
-        "x": 0,
-        "y": 0,
-        "z": 0
-    };
+module.exports = function retaliandotelo(mod) {
 
-    const retaliate = {
-        "reserved": 0,
-        "npc": false,
-        "type": 1,
-        "huntingZoneId": 0,
-        "id": 131000
-    };
+    let RETALIATE = {
+            reserved: 0,
+            npc: false,
+            type: 1,
+            huntingZoneId: 0,
+            id: 0
+        },
+        RETALIATE_IDs = [
+            131000, // Warrior
+            111000, // Lancer
+            101000, // Slayer
+            103000, // Berserker
+            141000, // Sorcerer
+            141000, // Archer
+            251000, // Priest
+            211000, // Mystic
+            140300, // Reaper
+            201000, // Gunner
+            121000, // Brawler
+            101000, // Ninja
+            181099, // Valkyrie
+        ];
 
-    const command = mod.command;
+    let w,
+        loc,
+        dest,
+        job,
+        templateId;
 
-    command.add('retaliate', {
-        $none() {
-            enabled = !enabled;
-            command.message(`${enabled ? "enabled" : "disabled"}`);
-        }
+    mod.hook('S_LOGIN', 14, (event) => {
+        job = (event.templateId - 10101) % 100;
+        RETALIATE.id = RETALIATE_IDs[job];
+        templateId = event.templateId;
     });
 
-    mod.hook('S_LOGIN', mod.majorPatchVersion >= 81 ? 14 : 13, (event) => {
-        cid = event.gameId;
+    mod.hook('C_PLAYER_LOCATION', 5, (event) => {
+        w = event.w;
+        loc = event.loc;
+        dest = event.dest;
     });
-
-    mod.hook("C_PLAYER_LOCATION", 5, (event) => {
-		if (enabled) {
-			loc = event.loc;
-			w = event.w;
-		}
-	});
 
     mod.hook('S_EACH_SKILL_RESULT', 14, (event) => {
-        if(enabled){
-            if(event.target === cid){
-                if(event.reaction.enable == true){
-                    failsafe = 0;
-                    setTimeout(function () { useRetaliate(); }, 700);
-                    
-                }
-            }
-        }
-    });
+        if (event.reaction.skill.id !== (templateId * 100) + 2)
+            return;
 
-    function useRetaliate(){
-        if(failsafe < 25){
-            failsafe++;
-            mod.toServer('C_START_SKILL', 7, {
-                skill: retaliate,
-				w: w,
-				loc: loc,
-				//dest: dest, 
-				unk: false,
-				moving: false,
-				continue: false,
-				//target: 0n,
-				unk2: false
-            });
-            setTimeout(function () { useRetaliate(); }, 50);
-        }
-    }
-}   
+        mod.send('C_START_SKILL', 7, {
+                skill: RETALIATE,
+                w: w,
+                loc: loc,
+                dest: dest,
+                unk: true,
+                moving: false,
+                cont: false,
+                target: 0,
+                unk2: false
+            }
+        );
+    });
+};
