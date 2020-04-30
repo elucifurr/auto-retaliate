@@ -1,4 +1,4 @@
-module.exports = function retaliandotelo(mod) {
+module.exports = function Retaliate(mod) {
 
     let RETALIATE = {
             reserved: 0,
