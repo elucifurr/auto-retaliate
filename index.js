@@ -11,7 +11,7 @@ module.exports = function Retaliate(mod) {
             131000, // Warrior
             111000, // Lancer
             101000, // Slayer
-            103000, // Berserker
+            131000, // Berserker
             141000, // Sorcerer
             141000, // Archer
             251000, // Priest
